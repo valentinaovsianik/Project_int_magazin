@@ -1,0 +1,67 @@
+[
+{
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+        "name": "Royal Canin",
+        "description": "Высококачественный сухой корм для собак",
+        "photo": "",
+        "category": 1,
+        "price": "12.50",
+        "created_at": "2024-10-09T14:03:54.844Z",
+        "updated_at": "2024-10-09T14:03:54.844Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+        "name": "Proplan гастро",
+        "description": "Высококачественный сухой корм для собак с проблемами пищеварения",
+        "photo": "",
+        "category": 1,
+        "price": "15.00",
+        "created_at": "2024-10-09T14:05:14.427Z",
+        "updated_at": "2024-10-09T14:05:14.427Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "name": "Мурчик с ягненком",
+        "description": "Влажный корм для котят с 6 месяцев",
+        "photo": "",
+        "category": 2,
+        "price": "1.25",
+        "created_at": "2024-10-09T14:06:48.250Z",
+        "updated_at": "2024-10-09T14:06:48.250Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+        "name": "Мнямс",
+        "description": "Лакомство для котов",
+        "photo": "",
+        "category": 3,
+        "price": "0.35",
+        "created_at": "2024-10-09T14:08:22.667Z",
+        "updated_at": "2024-10-09T14:08:22.667Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+        "name": "Деревенские лакомства",
+        "description": "Подушечки со вкусом лосося для котов",
+        "photo": "",
+        "category": 3,
+        "price": "1.89",
+        "created_at": "2024-10-09T14:09:17.492Z",
+        "updated_at": "2024-10-09T14:09:17.492Z"
+    }
+}
+]
