@@ -2,20 +2,10 @@
 
 {% load my_tags %}
 
-{% block title %}
-Zoo help - Главная
-{% endblock %}
-
-{% block header %}
-Zoo help
-{% endblock %}
-
-{% block subheader %}
-Всё нужное для ваших питомцев и даже больше
-{% endblock %}
+{% block title %}Каталог - Zoo Help{% endblock %}
 
 {% block content %}
-<div class="row text-center">
+<div class="row">
     {% for product in products %}
         <div class="col-md-4">
             <div class="card mb-4 box-shadow">
@@ -25,11 +15,11 @@ Zoo help
                     object-fit: cover;
                     width: 100%;
                  }
-            </style>
+                </style>
                 <img src="{{ product.photo|media_filter }}" class="img-fluid card-img-top" alt="{{ product.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                    <p>{{ product.description }}</p>
                     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">Подробнее</a>
                 </div>
             </div>
