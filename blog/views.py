@@ -22,7 +22,6 @@ class BlogPostDetailView(DetailView):
         obj.save(update_fields=['views'])
         return obj
 
-
 class BlogPostCreateView(CreateView):
     model = BlogPost
     template_name = 'blog/blogpost_form.html'
