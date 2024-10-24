@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="row">
-    {% for product in products %}
+    {% for product in object_list %}
         <div class="col-md-4">
             <div class="card mb-4 box-shadow">
                 <style>
@@ -18,8 +18,8 @@
                 </style>
                 <img src="{{ product.photo|media_filter }}" class="img-fluid card-img-top" alt="{{ product.name }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p>{{ product.description }}</p>
+                    <h5 class="card-title">{{ object.name }}</h5>
+                    <p>{{ object.description }}</p>
                     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">Подробнее</a>
                 </div>
             </div>
