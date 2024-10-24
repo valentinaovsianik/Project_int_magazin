@@ -7,6 +7,9 @@ class BlogPostListView(ListView):
     template_name = 'blog/blogpost_list.html'
     context_object_name = 'posts'
 
+    def get_queryset(self):
+        return BlogPost.objects.filter(published=True)
+
 
 class BlogPostDetailView(DetailView):
     model = BlogPost
