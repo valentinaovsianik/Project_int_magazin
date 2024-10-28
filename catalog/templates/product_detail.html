@@ -4,22 +4,22 @@
 
 {% load my_tags %}
 
-{% block title %}{{ product.name }} - Zoo Help{% endblock %}
+{% block title %}{{ object.name }} - Zoo Help{% endblock %}
 
 {% block content %}
 <div class="container">
 
     <div class="row">
         <div class="col-md-6">
-            <img src="{{ product.photo|media_filter }}" class="img-fluid" alt="{{ product.name }}">
+            <img src="{{ object.photo|media_filter }}" class="img-fluid" alt="{{ object.name }}">
         </div>
         <div class="col-md-6">
-            <h2>{{ product.name }}</h2>
-            <p>Категория: {{ product.category }} </p>
-            <p class="lead">Цена: {{ product.price }} руб.</p>
-            <p>Описание: {{ product.description }}</p>
-            <p>Дата создания: {{ product.created_at|date:"d.m.Y H:i" }}</p>
-            <p>Последнее изменение: {{ product.updated_at|date:"d.m.Y H:i" }}</p>
+            <h2>{{ object.name }}</h2>
+            <p>Категория: {{ object.category }} </p>
+            <p class="lead">Цена: {{ object.price }} руб.</p>
+            <p>Описание: {{ object.description }}</p>
+            <p>Дата создания: {{ object.created_at|date:"d.m.Y H:i" }}</p>
+            <p>Последнее изменение: {{ object.updated_at|date:"d.m.Y H:i" }}</p>
             <a href="{% url 'catalog:home' %}" class="btn btn-primary">Назад</a>
         </div>
     </div>
