@@ -30,9 +30,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="blogpost",
             name="preview_image",
-            field=models.ImageField(
-                upload_to="blog_previews/", verbose_name="Превью изображение"
-            ),
+            field=models.ImageField(upload_to="blog_previews/", verbose_name="Превью изображение"),
         ),
         migrations.AlterField(
             model_name="blogpost",
@@ -47,8 +45,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="blogpost",
             name="views",
-            field=models.PositiveIntegerField(
-                default=0, verbose_name="Количество просмотров"
-            ),
+            field=models.PositiveIntegerField(default=0, verbose_name="Количество просмотров"),
         ),
     ]

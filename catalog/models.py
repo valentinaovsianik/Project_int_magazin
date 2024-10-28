@@ -24,9 +24,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(
-        max_length=50, verbose_name="Продукт", help_text="Введите наименование продукта"
-    )
+    name = models.CharField(max_length=50, verbose_name="Продукт", help_text="Введите наименование продукта")
     description = models.TextField(
         verbose_name="Описание продукта",
         blank=True,
@@ -46,13 +44,9 @@ class Product(models.Model):
         related_name="products",
         verbose_name="Категория",
     )
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="Цена за покупку"
-    )
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена за покупку")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
-    updated_at = models.DateTimeField(
-        auto_now=True, verbose_name="Дата последнего изменения"
-    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата последнего изменения")
 
     class Meta:
         verbose_name = "Продукт"
