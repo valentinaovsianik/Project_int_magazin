@@ -1,5 +1,7 @@
 from django import forms
 from catalog.models import Product
+from django.core.exceptions import ValidationError
+
 
 
 class ContactForm(forms.Form):
@@ -30,3 +32,11 @@ class ProductForm(forms.ModelForm):
         for word in FORBIDDEN_WORDS:
             if word.lower() in text.lower():
                 raise forms.ValidationError(f"Использование слова '{word}' запрещено.")
+
+
+    # Проверяет, что цена не может быть отрицательной
+    def clean_price(self):
+        price = self.cleaned_data.get("price")
+        if price is not None and price < 0:
+            raise ValidationError("Цена продукта не может быть отрицательной.")
+        return price
