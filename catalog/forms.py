@@ -40,3 +40,30 @@ class ProductForm(forms.ModelForm):
         if price is not None and price < 0:
             raise ValidationError("Цена продукта не может быть отрицательной.")
         return price
+
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.fields["name"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Введите название продукта"
+        })
+
+        self.fields["description"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Введите описание продукта"
+        })
+
+        self.fields["price"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Введите цену продукта"
+        })
+
+        self.fields["category"].widget.attrs.update({
+            "class": "form-control"
+        })
+
+
+        self.fields["photo"].widget.attrs.update({
+            "class": "form-control"
+        })
+
