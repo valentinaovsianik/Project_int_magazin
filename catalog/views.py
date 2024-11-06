@@ -1,9 +1,10 @@
 from django.http import HttpResponse
-from django.views.generic import TemplateView, FormView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import ContactForm, ProductForm
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, TemplateView, UpdateView
 
 from catalog.models import Product
+
+from .forms import ContactForm, ProductForm
 
 
 class HomeView(TemplateView):
@@ -46,12 +47,14 @@ class ProductCreateView(CreateView):
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
 
+
 # Редактирование продукта
 class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
+
 
 # Удаление продукта
 class ProductDeleteView(DeleteView):
