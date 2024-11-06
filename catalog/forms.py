@@ -14,7 +14,7 @@ FORBIDDEN_WORDS = ["казино", "криптовалюта", "крипта", "
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["name", "description", "photo", "category", "price"]
+        fields = ["name", "description", "photo", "category", "price", "is_active"]
 
     def clean_name(self):
         name = self.cleaned_data["name"]
@@ -65,5 +65,9 @@ class ProductForm(forms.ModelForm):
 
         self.fields["photo"].widget.attrs.update({
             "class": "form-control"
+        })
+
+        self.fields["is_active"].widget.attrs.update({
+            "class": "form-check-input"
         })
 
