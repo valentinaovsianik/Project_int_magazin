@@ -1,15 +1,17 @@
 from django import forms
-from catalog.models import Product
 from django.core.exceptions import ValidationError
 
+from catalog.models import Product
 
 
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, label="Имя")
     message = forms.CharField(widget=forms.Textarea, label="Сообщение")
 
+
 # Слова, которые нельзя использовать в названии и описании продуктов
 FORBIDDEN_WORDS = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
+
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -33,7 +35,6 @@ class ProductForm(forms.ModelForm):
             if word.lower() in text.lower():
                 raise forms.ValidationError(f"Использование слова '{word}' запрещено.")
 
-
     # Проверяем, что цена не может быть отрицательной
     def clean_price(self):
         price = self.cleaned_data.get("price")
@@ -43,51 +44,32 @@ class ProductForm(forms.ModelForm):
 
     def clean_photo(self):
         photo = self.cleaned_data.get("photo")
+        max_size_mb = 5  # Максимальный размер в мегабайтах
 
-        # Проверяем на наличие изображения
-        if not photo:
-            return photo
+        if photo and photo.size > max_size_mb * 1024 * 1024:  # Конвертируем в байты
+            raise ValidationError(f"Размер изображения не должен превышать {max_size_mb} МБ.")
 
         # Проверяем формат изображения
         valid_formats = ["image/jpeg", "image/png"]
-        if photo.content_type not in valid_formats:
+        if photo and photo.content_type not in valid_formats:
             raise ValidationError("Изображение должно быть в формате JPEG или PNG.")
 
-        # Проверяем размер изображения
-        max_size_mb = 5
-        if photo_size > max_size_mb * 1024 * 1024: # Конвертируем в байты
-            raise ValidationError(f"Размер изображения не должен превышать {max_size_mb} МБ.")
+
 
         return photo
 
-
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
-        self.fields["name"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите название продукта"
-        })
+        self.fields["name"].widget.attrs.update({"class": "form-control", "placeholder": "Введите название продукта"})
 
-        self.fields["description"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите описание продукта"
-        })
+        self.fields["description"].widget.attrs.update(
+            {"class": "form-control", "placeholder": "Введите описание продукта"}
+        )
 
-        self.fields["price"].widget.attrs.update({
-            "class": "form-control",
-            "placeholder": "Введите цену продукта"
-        })
+        self.fields["price"].widget.attrs.update({"class": "form-control", "placeholder": "Введите цену продукта"})
 
-        self.fields["category"].widget.attrs.update({
-            "class": "form-control"
-        })
+        self.fields["category"].widget.attrs.update({"class": "form-control"})
 
+        self.fields["photo"].widget.attrs.update({"class": "form-control"})
 
-        self.fields["photo"].widget.attrs.update({
-            "class": "form-control"
-        })
-
-        self.fields["is_active"].widget.attrs.update({
-            "class": "form-check-input"
-        })
-
+        self.fields["is_active"].widget.attrs.update({"class": "form-check-input"})
