@@ -34,12 +34,32 @@ class ProductForm(forms.ModelForm):
                 raise forms.ValidationError(f"Использование слова '{word}' запрещено.")
 
 
-    # Проверяет, что цена не может быть отрицательной
+    # Проверяем, что цена не может быть отрицательной
     def clean_price(self):
         price = self.cleaned_data.get("price")
         if price is not None and price < 0:
             raise ValidationError("Цена продукта не может быть отрицательной.")
         return price
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get("photo")
+
+        # Проверяем на наличие изображения
+        if not photo:
+            return photo
+
+        # Проверяем формат изображения
+        valid_formats = ["image/jpeg", "image/png"]
+        if photo.content_type not in valid_formats:
+            raise ValidationError("Изображение должно быть в формате JPEG или PNG.")
+
+        # Проверяем размер изображения
+        max_size_mb = 5
+        if photo_size > max_size_mb * 1024 * 1024: # Конвертируем в байты
+            raise ValidationError(f"Размер изображения не должен превышать {max_size_mb} МБ.")
+
+        return photo
+
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
