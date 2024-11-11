@@ -1,12 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'catalog/base.html' %}
 
 {% load my_tags %}
 
-{% block title %}Каталог - Zoo Help{% endblock %}
+{% block title %}
+Zoo help - Главная
+{% endblock %}
+
+{% block header %}
+Zoo help
+{% endblock %}
+
+{% block subheader %}
+Всё нужное для ваших питомцев и даже больше
+{% endblock %}
 
 {% block content %}
-<div class="row">
-    {% for product in object_list %}
+<div class="row text-center">
+    {% for product in products %}
         <div class="col-md-4">
             <div class="card mb-4 box-shadow">
                 <style>
@@ -15,11 +25,11 @@
                     object-fit: cover;
                     width: 100%;
                  }
-                </style>
+            </style>
                 <img src="{{ product.photo|media_filter }}" class="img-fluid card-img-top" alt="{{ product.name }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ object.name }}</h5>
-                    <p>{{ object.description }}</p>
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description|truncatechars:100 }}</p>
                     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">Подробнее</a>
                 </div>
             </div>

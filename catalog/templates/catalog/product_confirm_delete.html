@@ -1,0 +1,14 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Удалить продукт - Zoo Help{% endblock %}
+{% block header %}Удаление продукта{% endblock %}
+{% block subheader %}Удалить продукт "{{ product.name }}"?{% endblock %}
+
+{% block content %}
+    <p>Вы уверены, что хотите удалить "{{ object }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a href="{% url "catalog:product_list" %}" class="btn btn-secondary">Отмена</a>
+    </form>
+{% endblock %}

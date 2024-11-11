@@ -1,0 +1,14 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}{% if object %}Редактировать{% else %}Создать{% endif %} продукт - Zoo Help{% endblock %}
+{% block header %}{% if object %}Редактировать{% else %}Создать{% endif %} продукт{% endblock %}
+{% block subheader %}Заполните информацию о продукте{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">{% if object %}Сохранить изменения{% else %}Создать продукт{% endif %}</button>
+        <a href="{% url "catalog:product_list" %}" class="btn btn-secondary">Отмена</a>
+    </form>
+{% endblock %}
