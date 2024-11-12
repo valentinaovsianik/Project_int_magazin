@@ -1,0 +1,15 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<h1>Профиль пользователя {{ user.email }}</h1>
+<p>Email: {{ user.email }}</p>
+<p>Телефон: {{ user.phone }}</p>
+<p>Страна: {{ user.country }}</p>
+
+{% if user.avatar %}
+    <img src="{{ user.avatar.url }}" alt="Аватар" style="display: block; margin-bottom: 10px;">
+{% endif %}
+
+<a href="{% url 'users:profile_edit' %}" class="btn btn-warning">Редактировать профиль</a>
+
+{% endblock %}
