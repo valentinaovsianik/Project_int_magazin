@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<a href="{% url "catalog:product_create" %}" class="btn btn-success mb-4">Добавить новый продукт</a>
+<a href="{% url 'catalog:product_create' %}" class="btn btn-success mb-4">Добавить новый продукт</a>
 
 <div class="row">
     {% for product in object_list %}

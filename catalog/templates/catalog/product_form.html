@@ -9,6 +9,6 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">{% if object %}Сохранить изменения{% else %}Создать продукт{% endif %}</button>
-        <a href="{% url "catalog:product_list" %}" class="btn btn-secondary">Отмена</a>
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary">Отмена</a>
     </form>
 {% endblock %}

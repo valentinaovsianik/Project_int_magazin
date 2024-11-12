@@ -22,8 +22,8 @@
             <p>Последнее изменение: {{ object.updated_at|date:"d.m.Y H:i" }}</p>
             <a href="{% url 'catalog:home' %}" class="btn btn-primary">Назад</a>
 
-            <a href="{% url "catalog:product_update" object.pk %}" class="btn btn-warning">Редактировать</a>
-            <a href="{% url "catalog:product_delete" object.pk %}" class="btn btn-danger">Удалить</a>
+            <a href="{% url 'catalog:product_update' object.pk %}" class="btn btn-warning">Редактировать</a>
+            <a href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-danger">Удалить</a>
 
         </div>
     </div>
