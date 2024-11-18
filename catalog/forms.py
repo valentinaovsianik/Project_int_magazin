@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from catalog.models import Product
+from PIL import Image
 
 
 class ContactForm(forms.Form):
@@ -46,17 +47,20 @@ class ProductForm(forms.ModelForm):
         photo = self.cleaned_data.get("photo")
         max_size_mb = 5  # Максимальный размер в мегабайтах
 
-        if photo and photo.size > max_size_mb * 1024 * 1024:  # Конвертируем в байты
+        if not photo or not hasattr(photo, "size"):
+            return photo
+
+        if photo.size > max_size_mb * 1024 * 1024:  # Конвертируем в байты
             raise ValidationError(f"Размер изображения не должен превышать {max_size_mb} МБ.")
 
         # Проверяем формат изображения
         valid_formats = ["image/jpeg", "image/png"]
-        if photo and photo.content_type not in valid_formats:
+        content_type = getattr(photo, "content_type", None)
+        if content_type and content_type not in valid_formats:
             raise ValidationError("Изображение должно быть в формате JPEG или PNG.")
 
-
-
         return photo
+
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)

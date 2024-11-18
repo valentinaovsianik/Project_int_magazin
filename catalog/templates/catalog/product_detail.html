@@ -23,7 +23,17 @@
             <a href="{% url 'catalog:home' %}" class="btn btn-primary">Назад</a>
 
             <a href="{% url 'catalog:product_update' object.pk %}" class="btn btn-warning">Редактировать</a>
-            <a href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+            {% if perms.catalog.can_delete_product %}
+                <a href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+            {% endif %}
+
+            {% if perms.catalog.can_unpublish_product and object.is_published %}
+                <form action="{% url 'catalog:product_detail' object.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">Отменить публикацию</button>
+                </form>
+            {% endif %}
 
         </div>
     </div>
