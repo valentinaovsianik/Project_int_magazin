@@ -25,15 +25,9 @@
                     <p>{{ product.description }}</p>
                     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">Подробнее</a>
 
-                    {% if perms.catalog.can_unpublish_product and product.is_published %}
-                        <form method="post" action="{% url 'catalog:product_unpublish' product.pk %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-warning">Отменить публикацию</button>
-                        </form>
-                    {% endif %}
-
-                    {% if perms.catalog.can_delete_product %}
-                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить</a>
+                    {% if user == product.owner or is_moderator %}
+                        <a href="{% url 'catalog:product_update' product.pk %}">Редактировать</a>
+                        <a href="{% url 'catalog:product_delete' product.pk %}">Удалить</a>
                     {% endif %}
 
                 </div>

@@ -41,6 +41,7 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["can_unpublish"] = self.request.user.has_perm("catalog.can_unpublish_product")
+        context["is_moderator"] = self.request.user.groups.filter(name="Moderator Products").exists()
         return context
 
     def get_queryset(self):
@@ -53,6 +54,13 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
     template_name = "catalog/product_detail.html"
     context_object_name = "product"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Проверяем принадлежность пользователя к группе
+        context["is_moderator"] = self.request.user.groups.filter(name="Moderator Products").exists()
+        return context
+
+
 
 # Создание продукта
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -60,6 +68,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # Привязка владельца
+        return super().form_valid(form)
 
 
 # Редактирование продукта
@@ -69,10 +81,18 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "catalog/product_form.html"
     success_url = reverse_lazy("catalog:product_list")
 
+    def get_object(self, queryset=None):
+        """Проверка, что только владелец или модератор может редактировать продукт."""
+        product = super().get_object(queryset)
+        if product.owner != self.request.user and not self.request.user.groups.filter(name="Moderator Products").exists():
+            raise PermissionDenied("У вас нет прав на редактирование этого продукта.")
+        return product
+
     def form_valid(self, form):
         product = form.instance  # Текущий объект продукта
         is_active = form.cleaned_data.get("is_active")
 
+        # Проверка на отмену публикации
         if not is_active and not self.request.user.has_perm("catalog.can_unpublish_product"):
             form.add_error("is_active", "У вас нет прав для отмены публикации продукта.")
             return self.form_invalid(form)
@@ -92,8 +112,16 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     success_url = reverse_lazy("catalog:product_list")
     permission_required = "catalog.delete_product"
 
+    def get_object(self, queryset=None):
+        """Проверка, что только владелец или модератор могут удалить продукт."""
+        product = super().get_object(queryset)
+        if product.owner != self.request.user and not self.request.user.groups.filter(
+                name="Moderator Products").exists():
+            raise PermissionDenied("У вас нет прав на удаление этого продукта.")
+        return product
+
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.has_perm("catalog.can_delete_product"):
             return HttpResponseForbidden("У вас нет прав на удаление этого продукта.")
         return super().dispatch(request, *args, **kwargs)
-
