@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Category(models.Model):
@@ -53,7 +53,7 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         related_name="products",
         verbose_name="Владелец",
-        default=1  # Назначаем владельца для всех уже существующих записей в таблице продуктов
+        default=1,  # Назначаем владельца для всех уже существующих записей в таблице продуктов
     )
 
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата последнего изменения")

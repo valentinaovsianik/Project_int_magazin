@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 
 from .views import (ContactView, HomeView, ProductCreateView, ProductDeleteView, ProductDetailView, ProductListView,
-                    ProductUpdateView, ProductsByCategoryView)
+                    ProductsByCategoryView, ProductUpdateView)
 
 app_name = "catalog"
 
