@@ -24,6 +24,12 @@
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p>{{ product.description }}</p>
                     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary">Подробнее</a>
+
+                    {% if user == product.owner or is_moderator %}
+                        <a href="{% url 'catalog:product_update' product.pk %}">Редактировать</a>
+                        <a href="{% url 'catalog:product_delete' product.pk %}">Удалить</a>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
