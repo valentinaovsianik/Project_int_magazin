@@ -3,8 +3,10 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, TemplateView, UpdateView, View
 
-from catalog.models import Product
+from catalog.models import Product, Category
 from django.contrib import messages
+
+from catalog.services import get_products_by_category
 
 from .forms import ContactForm, ProductForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -125,3 +127,20 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
         if not request.user.has_perm("catalog.can_delete_product"):
             return HttpResponseForbidden("У вас нет прав на удаление этого продукта.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProductsByCategoryView(ListView):
+    model = Product
+    template_name = "catalog/products_by_category.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("category_id")
+        self.category = get_object_or_404(Category, id=category_id)
+        return Product.objects.filter(category=self.category)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = self.category
+        return context
+
