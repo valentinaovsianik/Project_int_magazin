@@ -6,7 +6,10 @@ from django.views.generic import CreateView, DeleteView, DetailView, FormView, L
 from catalog.models import Product, Category
 from django.contrib import messages
 
+from django.core.cache import cache
+
 from catalog.services import get_products_by_category
+from catalog.services import get_cached_product_list
 
 from .forms import ContactForm, ProductForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -48,7 +51,7 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         # Фильтруем только активные продукты
-        return Product.objects.filter(is_active=True)
+        return get_cached_product_list()
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
