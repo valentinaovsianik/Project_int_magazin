@@ -1,13 +1,14 @@
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, TemplateView, UpdateView, View
 
-from catalog.models import Product
-from django.contrib import messages
+from catalog.models import Category, Product
+from catalog.services import get_cached_product_list
 
 from .forms import ContactForm, ProductForm
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class HomeView(TemplateView):
@@ -36,7 +37,6 @@ class ProductListView(ListView):
     template_name = "product_list.html"
     context_object_name = "products"
 
-
     # Проверка прав пользователя
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,7 +46,7 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         # Фильтруем только активные продукты
-        return Product.objects.filter(is_active=True)
+        return get_cached_product_list()
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -59,7 +59,6 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         # Проверяем принадлежность пользователя к группе
         context["is_moderator"] = self.request.user.groups.filter(name="Moderator Products").exists()
         return context
-
 
 
 # Создание продукта
@@ -84,7 +83,10 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         """Проверка, что только владелец или модератор может редактировать продукт."""
         product = super().get_object(queryset)
-        if product.owner != self.request.user and not self.request.user.groups.filter(name="Moderator Products").exists():
+        if (
+            product.owner != self.request.user
+            and not self.request.user.groups.filter(name="Moderator Products").exists()
+        ):
             raise PermissionDenied("У вас нет прав на редактирование этого продукта.")
         return product
 
@@ -115,13 +117,30 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     def get_object(self, queryset=None):
         """Проверка, что только владелец или модератор могут удалить продукт."""
         product = super().get_object(queryset)
-        if product.owner != self.request.user and not self.request.user.groups.filter(
-                name="Moderator Products").exists():
+        if (
+            product.owner != self.request.user
+            and not self.request.user.groups.filter(name="Moderator Products").exists()
+        ):
             raise PermissionDenied("У вас нет прав на удаление этого продукта.")
         return product
-
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.has_perm("catalog.can_delete_product"):
             return HttpResponseForbidden("У вас нет прав на удаление этого продукта.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProductsByCategoryView(ListView):
+    model = Product
+    template_name = "catalog/products_by_category.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("category_id")
+        self.category = get_object_or_404(Category, id=category_id)
+        return Product.objects.filter(category=self.category)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = self.category
+        return context
