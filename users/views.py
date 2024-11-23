@@ -1,14 +1,15 @@
+from django.conf import settings
 from django.contrib.auth import login
-from django.views.generic import FormView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
-from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
-from django.conf import settings
-from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import UpdateView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView, FormView, UpdateView
+
+from .forms import UserLoginForm, UserProfileForm, UserRegistrationForm
 from .models import User
-from django.contrib.auth.decorators import login_required
+
 
 class RegisterView(FormView):
     template_name = "users/register.html"
@@ -30,6 +31,7 @@ class RegisterView(FormView):
         )
 
         return super().form_valid(form)
+
 
 class UserLoginView(LoginView):
     authentication_form = UserLoginForm
@@ -58,6 +60,7 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     def get_object(self):
         return self.request.user
 
+
 @login_required
 def profile_edit(request):
     user = request.user
@@ -70,5 +73,3 @@ def profile_edit(request):
             return redirect("users:profile")
 
     return render(request, "users/profile_edit.html", {"form": form})
-
-

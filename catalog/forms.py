@@ -2,7 +2,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from catalog.models import Product
-from PIL import Image
 
 
 class ContactForm(forms.Form):
@@ -60,7 +59,6 @@ class ProductForm(forms.ModelForm):
             raise ValidationError("Изображение должно быть в формате JPEG или PNG.")
 
         return photo
-
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
